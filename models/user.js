@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var pinSchema =  require('pin.js').schema
 
-var userSchema = mongoose.schema({
+var userSchema = new mongoose.Schema({
   userName: { type: String, index: { unique: true } },
   password: String,
   pins: [pinSchema],

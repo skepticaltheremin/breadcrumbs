@@ -1,9 +1,11 @@
 var mongoose = require('mongoose');
 
-var pinSchema = mongoose.schema({
+var pinSchema = new mongoose.Schema({
   note: String,
+  address String,
   lat: Number,
   lng: Number,
+  details Object,
   timestamp Number
 });
 
