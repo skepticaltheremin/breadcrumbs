@@ -41,7 +41,6 @@ var MapApp = React.createClass({
   //   else{
   //     this.addToFavorites(address);
   //   }
-
   // },
 
   addToFavorites(address){
@@ -81,34 +80,34 @@ var MapApp = React.createClass({
     localStorage.favorites = JSON.stringify(favorites);
   },
 
-  removeFromFavorites(address){
+  // removeFromFavorites(address){
 
-    var favorites = this.state.favorites;
-    var index = -1;
+  //   var favorites = this.state.favorites;
+  //   var index = -1;
 
-    for(var i = 0; i < favorites.length; i++){
+  //   for(var i = 0; i < favorites.length; i++){
 
-      if(favorites[i].address == address){
-        index = i;
-        break;
-      }
+  //     if(favorites[i].address == address){
+  //       index = i;
+  //       break;
+  //     }
 
-    }
+  //   }
 
-    // If it was found, remove it from the favorites array
+  //   // If it was found, remove it from the favorites array
 
-    if(index !== -1){
+  //   if(index !== -1){
       
-      favorites.splice(index, 1);
+  //     favorites.splice(index, 1);
 
-      this.setState({
-        favorites: favorites
-      });
+  //     this.setState({
+  //       favorites: favorites
+  //     });
 
-      localStorage.favorites = JSON.stringify(favorites);
-    }
+  //     localStorage.favorites = JSON.stringify(favorites);
+  //   }
 
-  },
+  // },
 
   isAddressInFavorites(address){
 
