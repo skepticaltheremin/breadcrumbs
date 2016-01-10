@@ -15,14 +15,14 @@ mongoose.connect('mongodb://localhost/maps');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-app.use(express.static(path.join(__dirname, "./public")));
+app.use(express.static(path.join(__dirname, "/public")));
     
 // app.use('/api', router);
 
-app.get("/", function (req, res) {
-  console.log('home')
-  res.send(__dirname + "..public/index.html");
-});
+// app.get("/", function (req, res) {
+//   console.log('home')
+//   res.send(__dirname + "..public/index.html");
+// });
 
 //redirect to home at a hash url
 // need to add middleware for actual loging authentication
