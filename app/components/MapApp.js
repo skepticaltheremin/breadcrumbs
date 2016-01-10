@@ -109,20 +109,20 @@ var MapApp = React.createClass({
 
   // },
 
-  isAddressInFavorites(address){
+  // isAddressInFavorites(address){
 
-    var favorites = this.state.favorites;
+  //   var favorites = this.state.favorites;
 
-    for(var i = 0; i < favorites.length; i++){
+  //   for(var i = 0; i < favorites.length; i++){
 
-      if(favorites[i].address == address){
-        return true;
-      }
+  //     if(favorites[i].address == address){
+  //       return true;
+  //     }
 
-    }
+  //   }
 
-    return false;
-  },
+  //   return false;
+  // },
 
   searchForAddress(address, cb){
     var self = this;
