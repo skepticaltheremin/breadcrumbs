@@ -6,6 +6,9 @@ var CurrentLocation = require('./CurrentLocation');
 var LocationList = require('./LocationList');
 var SearchUser = require('./SearchUser');
 
+// MapApp contains the primary render statement that displays the map with 
+// breadcrumbs and the users notes about the breadcrumbs. You can see this
+// render() statement at the bottom MapApp.
 var MapApp = React.createClass({
 
   getInitialState(){
@@ -18,7 +21,7 @@ var MapApp = React.createClass({
       favorites = JSON.parse(localStorage.favorites);
     }
 
-    // Nobody would get mad if we center it on Paris by default
+    // Let's intitally set our map on Hack Reactor, by default
 
     return {
       favorites: favorites,
@@ -30,16 +33,16 @@ var MapApp = React.createClass({
     };
   },
 
-  toggleFavorite(address){
+  // toggleFavorite(address){
 
-    if(this.isAddressInFavorites(address)){
-      this.removeFromFavorites(address);
-    }
-    else{
-      this.addToFavorites(address);
-    }
+  //   if(this.isAddressInFavorites(address)){
+  //     this.removeFromFavorites(address);
+  //   }
+  //   else{
+  //     this.addToFavorites(address);
+  //   }
 
-  },
+  // },
 
   addToFavorites(address){
 
