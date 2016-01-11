@@ -59,6 +59,8 @@ var MapApp = React.createClass({
   //   localStorage.favorites = JSON.stringify(favorites);
   // },
 
+  // addToFavBreadCrumbs adds the data associated with a breadcrumb to
+  // a user's collection of breadcrumbs.
   addToFavBreadCrumbs(id, lat, lng, timestamp, details, location) {
     console.log(arguments);
     var favorites = this.state.favorites;
@@ -77,6 +79,7 @@ var MapApp = React.createClass({
       favorites: favorites
     });
 
+    // adds breadcrumb data to browser's local storage
     localStorage.favorites = JSON.stringify(favorites);
   },
 
@@ -124,11 +127,10 @@ var MapApp = React.createClass({
   //   return false;
   // },
 
+  // searchForAddress uses the GMaps library, which is built on top of
+  // Google Maps, to find a street address
   searchForAddress(address, cb){
     var self = this;
-
-    // We will use GMaps' geocode functionality,
-    // which is built on top of the Google Maps API
 
     GMaps.geocode({
       address: address,
