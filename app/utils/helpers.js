@@ -59,10 +59,37 @@ var signupUser = function(username, password, cb){
   });
 };
 
+var login = function(username, password, cb){
+  console.log(username,password);
+  var user = {
+    username: username,
+    password: password
+  };
+  $.ajax({
+    url: '/api/users', //This needs to be a different route for login. not yet implemented
+    type: 'POST',
+    data: user,
+    dataType: 'json',
+    success: function(data){
+      window.location.href = "#map";
+      if(cb){
+        cb(data);
+      }
+    },
+    error: function(xhr, status, err) {
+      console.log("err");
+      console.log(xhr.toString(), status.toString(), err.toString());
+      // console.log(status, err.toString());
+    }
+
+  });
+};
+
 var helpers = {
   getAllBreadCrumbs: getAllBreadCrumbs,
   addBreadCrumb: addBreadCrumb,
-  signupUser: signupUser
+  signupUser: signupUser,
+  login: login
 }
 
 module.exports = helpers;

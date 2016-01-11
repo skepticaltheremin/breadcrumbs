@@ -1,4 +1,5 @@
 var React = require('react');
+var helpers = require('../utils/helpers');
 
 var Login = React.createClass({
   getInitialState: function() {
@@ -7,42 +8,40 @@ var Login = React.createClass({
       password: '',
     };
   },
-  handleChange: function(event) {
-    console.log(event.target, event.target.value);
+  handleUsernameChange: function(event) {
     this.setState({username: event.target.value});
+  },
+  handlePasswordChange: function(event){
+    this.setState({password: event.target.value});
   },
   login: function(e){
     e.preventDefault();
-    // console.log("login: ", this.state.username, this.state.password);
-
+    var self = this;
+    console.log("Login called:", this.state.username, this.state.password);
+    helpers.login(this.state.username,this.state.password);
+    this.props.loginUser(this.state.username);
   },
 
   render: function(){
-    var value = this.state.value;
     return(
-
       <div>
-      <h2>Login</h2>
-      <form action="/login" method="post" role="form">
-        <div className="form-group">
-          <label htmlFor="username" className="col-sm-2">Username: </label>
-          <div className="col-sm-10">
-            <input id="username" type="text" name="username" className="form-control" />
-          </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="password" className="col-sm-2">Password: </label>
-          <div className="col-sm-10" >
-          <input id="password" type="password" name="password" className="form-control" />
-          </div>
-        </div>
-        <div>
-          <input type="submit" className="btn btn-primary" value="Login" />
-        </div>
-      </form>
-      <p>
-        <a href="#signup">Create an Account &rarr;</a>
-      </p>
+         <h2>Login</h2>
+         <form  onSubmit={this.login} >
+           <div>
+             <label htmlFor="username">Username:</label>
+             <input onChange={this.handleUsernameChange} value={this.state.username} id="username" type="text" name="username" />
+           </div>
+           <div>
+             <label htmlFor="password">Password:</label>
+             <input onChange={this.handlePasswordChange} value={this.state.password} id="password" type="password" name="password" />
+           </div>
+           <div>
+             <input className="btn btn-primary" type="submit" value="Sign up" />
+           </div>
+       </form>
+       <p>
+         <a href="#login">Login to your account &rarr;</a>
+       </p>
       </div>
 
     )
