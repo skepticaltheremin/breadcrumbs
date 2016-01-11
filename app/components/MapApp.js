@@ -62,9 +62,9 @@ var MapApp = React.createClass({
   // addToFavBreadCrumbs adds the data associated with a breadcrumb to
   // a user's collection of breadcrumbs.
   addToFavBreadCrumbs(id, lat, lng, timestamp, details, location) {
-    console.log(arguments);
+    // console.log(arguments);
     var favorites = this.state.favorites;
-    console.log(this.state.currentAddress);
+    // console.log(this.state.currentAddress);
     favorites.push({
       id: id,
       lat: lat,
