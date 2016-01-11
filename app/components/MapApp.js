@@ -43,21 +43,21 @@ var MapApp = React.createClass({
   //   }
   // },
 
-  addToFavorites(address){
+  // addToFavorites(address){
 
-    var favorites = this.state.favorites;
+  //   var favorites = this.state.favorites;
 
-    favorites.push({
-      address: address,
-      timestamp: Date.now()
-    });
+  //   favorites.push({
+  //     address: address,
+  //     timestamp: Date.now()
+  //   });
 
-    this.setState({
-      favorites: favorites
-    });
+  //   this.setState({
+  //     favorites: favorites
+  //   });
 
-    localStorage.favorites = JSON.stringify(favorites);
-  },
+  //   localStorage.favorites = JSON.stringify(favorites);
+  // },
 
   addToFavBreadCrumbs(id, lat, lng, timestamp, details, location) {
     console.log(arguments);
