@@ -1,4 +1,5 @@
 var React = require('react');
+var helpers = require('../utils/helpers');
 
 var Map = React.createClass({
   getInitialState(){
@@ -8,7 +9,8 @@ var Map = React.createClass({
       lng: this.props.lng,
       previousMarker: null,
       currentMarker: null,
-      lastMarkerTimeStamp: null
+      lastMarkerTimeStamp: null,
+      favorites: []
     }
   },
   
@@ -21,12 +23,10 @@ var Map = React.createClass({
   },
 
   matchBreadCrumb(timestamp){
-    var breadcrumbs = this.props.favorites;
+    var breadcrumbs = this.state.favorites;
     for(var i = breadcrumbs.length - 1; i >= 0; i--){
       var breadcrumb = breadcrumbs[i];
       if(breadcrumb.timestamp === timestamp){
-        // console.log("Breadcrumb found!");
-        // console.log(breadcrumb.location);
         this.setState({location: breadcrumb.location, comment: breadcrumb.details.note})
         return;
       }
@@ -34,12 +34,11 @@ var Map = React.createClass({
 
   },
 
-  // toggleFavorite(address){
-  //   this.props.onFavoriteToggle(address);
-  // },
+  toggleFavorite(address){
+    this.props.onFavoriteToggle(address);
+  },
 
   addFavBreadCrumb(id, lat, lng, timestamp, details, infoWindow, location) {
-    // console.log(timestamp);
     this.props.onAddToFavBcs(id, lat, lng, timestamp, details, infoWindow, location);
   },
 
@@ -88,7 +87,6 @@ var Map = React.createClass({
           });
           var id = self.props.favorites.length;
           var time = Date.now();
-          // console.log(time);
           self.setState({lastMarkerTimeStamp: time});
           var marker = this.addMarker({
             lat: e.latLng.lat(),
@@ -105,8 +103,6 @@ var Map = React.createClass({
             //   content: '<p style="height:200px; width: 800px;">HTML Content </p>'
             // },
             click: function(e) {
-              // console.log(e.id);
-              // console.log(e.timestamp);
               self.setState({currentMarker: this});
               self.updateCurrentLocation();
               self.matchBreadCrumb(e.timestamp);
@@ -127,6 +123,35 @@ var Map = React.createClass({
     });
     
     // map.addMarkers(this.props.favorites);
+    helpers.getAllBreadCrumbs("testuser", function(data){
+      if(!data){
+        return;
+      }
+      self.setState({favorites: data.pins});
+      self.state.favorites.forEach(function(favorite, index){
+        map.addMarker({
+          lat: favorite.lat,
+          lng: favorite.lng,
+          title: 'New marker',
+          id: index,
+          timestamp: favorite.timestamp,
+          icon: {
+            path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+            strokeColor: "red",
+            scale: 5
+          },
+          click: function(e) {
+            self.setState({currentMarker: this});
+            self.updateCurrentLocation();
+            self.matchBreadCrumb(e.timestamp);
+            // self.state.currentMarker.setMap(null);
+          }
+        });
+
+      });
+    });
+
+    /*
     this.props.favorites.forEach(function(favorite, index){
       map.addMarker({
         lat: favorite.lat,
@@ -141,8 +166,8 @@ var Map = React.createClass({
         },
         click: function(e) {
           // console.log(e);
-          // console.log(e.id);
-          // console.log(e.timestamp);
+          console.log(e.id);
+          console.log(e.timestamp);
           self.setState({currentMarker: this});
           self.updateCurrentLocation();
           self.matchBreadCrumb(e.timestamp);
@@ -151,6 +176,7 @@ var Map = React.createClass({
       });
 
     });
+    */
 
   },
 
@@ -241,10 +267,8 @@ var Map = React.createClass({
 
   handleSubmit(e) {
     e.preventDefault();
-    // console.log("submitted");
     var id = this.props.favorites.length;
     var timestamp = this.state.lastMarkerTimeStamp;
-    // console.log(timestamp);
     this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location);
     // this.state.currentMarker.setMap(null);
     this.setState({location: '', comment: ''});
