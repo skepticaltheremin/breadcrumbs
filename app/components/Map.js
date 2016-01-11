@@ -34,9 +34,9 @@ var Map = React.createClass({
 
   },
 
-  toggleFavorite(address){
-    this.props.onFavoriteToggle(address);
-  },
+  // toggleFavorite(address){
+  //   this.props.onFavoriteToggle(address);
+  // },
 
   addFavBreadCrumb(id, lat, lng, timestamp, details, infoWindow, location) {
     this.props.onAddToFavBcs(id, lat, lng, timestamp, details, infoWindow, location);
