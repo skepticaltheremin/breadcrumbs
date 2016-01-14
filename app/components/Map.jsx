@@ -249,9 +249,9 @@ var Map = React.createClass({
     e.preventDefault();
     var id = this.props.favorites.length;
     var timestamp = this.state.lastMarkerTimeStamp;
-    this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location);
+    this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location, this.state.category);
     // this.state.currentMarker.setMap(null);
-    this.setState({location: '', comment: ''});
+    this.setState({location: '', comment: '', category: 'General'});
   },
 
   render(){
@@ -264,7 +264,7 @@ var Map = React.createClass({
       </div>
       <form  onSubmit={this.handleSubmit} className="form-group list-group col-xs-12 col-md-6 col-md-offset-3" >
         <label htmlFor="category">Category:</label>
-        <DropDown id='category' title='General' items={['Food', 'Nature', 'Pets', 'Sports', 'Music', 'General']} />
+        <DropDown id='category' title='General' items={['Food', 'Nature', 'Pets', 'Sports', 'Music', 'General']} value={this.state.category} />
         <label htmlFor="location">Location:</label>
         <input type="text" className="form-control" id="location" onChange={this.handleLocationChange} value={this.state.location} placeholder="Location" />
         <label htmlFor="comment">Comment:</label>
