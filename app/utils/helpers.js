@@ -20,7 +20,7 @@ var addBreadCrumb = function(username, breadcrumb, cb) {
   $.ajax({
     url: '/api/maps/' + username,
     dataType: 'json',
-    type: 'PUT',
+    type: 'POST',
     data: breadcrumb,
     success: function(data) {
       // this.setState({data: data});
