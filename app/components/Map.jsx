@@ -13,7 +13,7 @@ var Map = React.createClass({
       currentMarker: null,
       lastMarkerTimeStamp: null,
       map: null,
-      // category: 'General'
+      category: 'General'
     }
   },
 
@@ -51,17 +51,19 @@ var Map = React.createClass({
 
   updateCurrentLocation(){
     if(this.state.previousMarker){
+      console.log('previousMarker', this.state.previousMarker);
       this.state.previousMarker.setIcon({
         path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-        strokeColor: "red",
+        color:this.state.previousMarker.icon.color,
         scale: 5
       });
     }
     this.state.currentMarker.setIcon({
       path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-      strokeColor: "green",
-      scale: 5
+      color:this.colorGenerator(this.state),
+      scale: 10
     });
+    console.log('currentMarker', this.state.currentMarker);
     this.state.previousMarker = this.state.currentMarker;
   },
 
@@ -105,7 +107,7 @@ var Map = React.createClass({
             timestamp: time,
             icon: {
               path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-              strokeColor: "green",
+              strokeColor: self.colorGenerator(self.state),
               scale: 5
             },
             // infoWindow: {
@@ -130,11 +132,16 @@ var Map = React.createClass({
         }
       }]
     });
+  this.refreshMap(map);
 
     console.log("favorites", this.props.favorites);
     
 
     // map.addMarkers(this.props.favorites); //no longer used
+  },
+  refreshMap(map){
+    var self = this;
+
     helpers.getAllBreadCrumbs(this.props.user, function(data){
       if(!data){
         return;
@@ -149,7 +156,7 @@ var Map = React.createClass({
           timestamp: favorite.timestamp,
           icon: {
             path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-            strokeColor: "red",
+            strokeColor: self.colorGenerator(favorite),
             scale: 5
           },
           click: function(e) {
@@ -162,7 +169,26 @@ var Map = React.createClass({
 
       });
     });
+  },
 
+
+  colorGenerator(input){
+    console.log('color',input.category);
+    if(input.category === 'Food'){
+      return 'red';
+    }else if(input.category === 'Nature'){
+      return 'green';
+    }else if(input.category === 'Sports'){
+      return 'yellow';
+    }else if(input.category === 'Pets'){
+      return 'orange';
+    }else if(input.category === 'Music'){
+      return 'blue';
+    }else if(input.category === 'General'){
+      return 'black';
+    }else{
+      return 'purple';
+    }
   },
 
   componentDidUpdate(){
@@ -256,7 +282,7 @@ var Map = React.createClass({
     var timestamp = this.state.lastMarkerTimeStamp;
     this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location, this.state.category);
     // this.state.currentMarker.setMap(null);
-    this.setState({location: '', comment: '', category: 'General'});
+    this.setState({location: '', comment: ''});
   },
 
   render(){
@@ -269,7 +295,7 @@ var Map = React.createClass({
       </div>
       <form  onSubmit={this.handleSubmit} className="form-group list-group col-xs-12 col-md-6 col-md-offset-3" >
         <label htmlFor="category">Category:</label>
-        <DropDown id='category' title='General' items={['Food', 'Nature', 'Pets', 'Sports', 'Music', 'General']} whenSelected={this.handleCategoryChange} />
+        <DropDown id='category' title={this.state.category} items={['Food', 'Nature', 'Pets', 'Sports', 'Music', 'General']} whenSelected={this.handleCategoryChange} />
         <label htmlFor="location">Location:</label>
         <input type="text" className="form-control" id="location" onChange={this.handleLocationChange} value={this.state.location} placeholder="Location" />
         <label htmlFor="comment">Comment:</label>
