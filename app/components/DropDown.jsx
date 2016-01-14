@@ -16,6 +16,7 @@ module.exports = React.createClass({
       open: false,
       itemTitle: item
     });
+    this.props.whenSelected(item);
   },
   render: function (){
     var list = this.props.items.map(function(item){
