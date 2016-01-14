@@ -54,12 +54,13 @@ npm install
 |---|---|---|---|
 |/signup|GET|   |   |
 |/login|POST|   |   |
-|/api/users|GET|JSON(users)|   |
-|/api/users|POST|JSON(user)|username: str, password: str|
+|/api/users|GET|JSON(users)|username: str|
+|/api/users|POST|JSON(user)|username: str, name: str, avatar: str|
 |/api/users|DELETE|JSON(user)|username: str|
-|/api/maps/:username|GET|JSON(user)|   |
-|/api/maps/:username|PUT|JSON(pin)|pin: obj|
+|/api/maps/:username|GET|JSON(pin)|   |
+|/api/maps/:username|POST|JSON(pin)|pin: obj|
 |/api/maps/:username|DELETE|JSON(pin)|_id: str|
+|/api/maps/:username|PUT|JSON(pin)|_id: str, newPin: pinObj|
 
 ### Roadmap
 
