@@ -92,16 +92,17 @@ exports.removeLastPin = function (name, callback) {
 // updates a specific pin. Called when api/maps/:username hears a put request
 exports.updatePins = function (name, pinId, newPin, callback) {
   User.findOne(name, function (err, user) {
-    console.log('trying to update pin ', pinId);
-    for (var i = 0; i < users.pins.length; i++) {
-      var pin = user.pins[i];
-      if (pin._id === pinId) {
-        pin = newPin;
+    console.log('trying to update pin of id ', pinId);
+    for (var i = 0; i < user.pins.length; i++) {
+      if (user.pins[i]._id == pinId) {
+        user.pins.splice(i,1);
+        user.pins.splice(i,0,newPin);
         user.save();
-        callback(err, pin);
+        callback(err, newPin);
         return;
       }
     }
+    return callback(Error('No such pin with this _id'));
   });
 };
 
