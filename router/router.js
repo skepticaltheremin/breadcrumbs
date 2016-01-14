@@ -18,7 +18,7 @@ console.log('using router...');
 router.route('/users')
   .get(function (req, res) {
     console.log('user get', req.body);
-    userController.getUser(function(err, person){
+    userController.getUser(req.body, function(err, person){
       if (err) {
         return res.json({err: err});
       }
