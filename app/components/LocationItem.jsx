@@ -23,7 +23,7 @@ var LocationItem = React.createClass({
         <span>{this.props.address}</span>
         <span className="createdAt">{ moment(this.props.timestamp).fromNow() }</span>
       </a>
-      <EditItem title="EDIT" />
+        <button className='btn btn-primary glyphicon-menu-right' data-toggle='modal' data-target='#myModal'>{this.props.title}</button>
       </span>
     )
 

@@ -7,6 +7,7 @@ var LocationList = require('./LocationList.jsx');
 var SearchUser = require('./SearchUser.jsx');
 var helpers = require('../utils/helpers');
 var Signup = require('./Signup.jsx');
+var EditItem = require('./EditItem.jsx')
 
 
 var MapApp = React.createClass({
@@ -118,6 +119,7 @@ var MapApp = React.createClass({
       return (
 
         <div>
+          <EditItem />
           <h1 className="col-xs-12 col-md-6 col-md-offset-3">My Breadcrumbs</h1>
           <Search onSearch={this.searchForAddress} />
 

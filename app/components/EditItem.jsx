@@ -6,7 +6,6 @@ var EditItem = React.createClass({
 	
   render(){
 	return <span>
-	<button className='btn btn-primary glyphicon-menu-right' data-toggle='modal' data-target='#myModal'>{this.props.title}</button>
 	<div id="myModal" className="modal fade" role="dialog">
 	  <div className="modal-dialog">
 	    <div className="modal-content">
