@@ -13,7 +13,7 @@ var Map = React.createClass({
       currentMarker: null,
       lastMarkerTimeStamp: null,
       map: null,
-      category: 'General'
+      // category: 'General'
     }
   },
 
