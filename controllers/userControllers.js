@@ -11,8 +11,8 @@ var Pin = require('../models/pin.js');
 //////////////////
 
 //Adds a new user; called when api/users hears a post request.
-exports.addUser = function (name, callback) {
-  User.create(name, function (err, person) {
+exports.addUser = function(newUser, callback) {
+  User.create(newUser, function (err, person) {
     if (err) {
       callback(err);
       return;
@@ -123,8 +123,9 @@ exports.deletePin = function (name, pinId, callback) {
 };
 
 //get all people --for testing mostly
-exports.getAll = function (callback) {
-  User.find({}, function (err, persons) {
+exports.getUser = function (query, callback) {
+  var searchUser = query ? query : {};
+  User.find(searchUser, function (err, persons) {
     if (err) {
       callback(err);
       return;
