@@ -16,6 +16,10 @@ h1 {
   border-radius: 3px;
 }
 
+#edit{
+float:left;
+}
+
 .input-group {
   margin-left: 4%;
 }

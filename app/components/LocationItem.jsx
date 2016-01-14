@@ -1,5 +1,6 @@
 var React = require('react');
 var moment = require('moment');
+var EditItem = require('./EditItem.jsx');
 
 var LocationItem = React.createClass({
 
@@ -16,11 +17,15 @@ var LocationItem = React.createClass({
     }
 
     return (
-      <a className={cn} onClick={this.handleClick}>
-        {this.props.address}
+      <span className={cn}>
+      <a onClick={this.handleClick}>
+        {this.props.details.note}
+        <span>{this.props.address}</span>
         <span className="createdAt">{ moment(this.props.timestamp).fromNow() }</span>
-        <span className="glyphicon glyphicon-menu-right"></span>
+        
       </a>
+      <EditItem title="EDIT" />
+      </span>
     )
 
   }
