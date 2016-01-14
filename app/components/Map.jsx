@@ -12,7 +12,8 @@ var Map = React.createClass({
       previousMarker: null,
       currentMarker: null,
       lastMarkerTimeStamp: null,
-      map: null
+      map: null,
+      category: 'General'
     }
   },
 
@@ -23,8 +24,8 @@ var Map = React.createClass({
   handleCommentChange(e) {
     this.setState({comment: e.target.value});
   },
-  handleCategoryChange(e) {
-    this.setState({category: e.target.title});
+  handleCategoryChange(categoryName) {
+    this.setState({category: categoryName});
   },
 
 
@@ -268,7 +269,7 @@ var Map = React.createClass({
       </div>
       <form  onSubmit={this.handleSubmit} className="form-group list-group col-xs-12 col-md-6 col-md-offset-3" >
         <label htmlFor="category">Category:</label>
-        <DropDown id='category' title='General' items={['Food', 'Nature', 'Pets', 'Sports', 'Music', 'General']} onChange={this.handelCategoryChange} />
+        <DropDown id='category' title='General' items={['Food', 'Nature', 'Pets', 'Sports', 'Music', 'General']} whenSelected={this.handleCategoryChange} />
         <label htmlFor="location">Location:</label>
         <input type="text" className="form-control" id="location" onChange={this.handleLocationChange} value={this.state.location} placeholder="Location" />
         <label htmlFor="comment">Comment:</label>
