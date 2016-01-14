@@ -47,7 +47,7 @@ var MapApp = React.createClass({
   componentDidMount(){
   },
 
-  addToFavBreadCrumbs(id, lat, lng, timestamp, details, location) {
+  addToFavBreadCrumbs(id, lat, lng, timestamp, details, location, category) {
     var favorites = this.state.favorites;
     var breadcrumb = {
       id: id,
@@ -56,7 +56,8 @@ var MapApp = React.createClass({
       timestamp: timestamp,
       details: details,
       address: this.state.currentAddress,
-      location: location
+      location: location,
+      category: category
     };
     favorites.push(breadcrumb);
 
