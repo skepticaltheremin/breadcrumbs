@@ -38,7 +38,7 @@ var MapApp = React.createClass({
     this.setState({user: username, loggedin: true}); 
     helpers.getAllBreadCrumbs(username, function(data){
       if(data){
-        this.setState({favorites: data.pins});
+        this.setState({favorites: data});
       }
     }.bind(this));
 

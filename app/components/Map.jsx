@@ -134,7 +134,7 @@ var Map = React.createClass({
       if(!data){
         return;
       }
-      self.setState({breadcrumbs: data.pins});
+      self.setState({breadcrumbs: data});
       self.state.breadcrumbs.forEach(function(favorite, index){
         map.addMarker({
           lat: favorite.lat,
