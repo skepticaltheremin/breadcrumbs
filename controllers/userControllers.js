@@ -22,7 +22,7 @@ exports.addUser = function(newUser, callback) {
 };
 
 //Removes a user; called when api/users hears a delete request.
-exports.removeUser = function(name, callback) {
+exports.removeUser = function (name, callback) {
   User.remove(name, function (err, person) {
     if (err) {
       callback(err);
@@ -37,24 +37,24 @@ exports.removeUser = function(name, callback) {
 //////////////////
 
 //find pins of single user
-exports.findOne = function (query, callback) {
-  User.findOne(query, function (err, person) {
+exports.findOne = function (name, callback) {
+  User.findOne(name, function (err, person) {
     if (err) {
       callback(err);
       return;
     }
-    callback(null, person);
+    callback(null, person.pins);
   });
 };
 
 //find user and add new pin to pins collection, one at a time
-//called when api/maps/:username hears a put request
-exports.updatePins = function (query, newPin, callback) {
+//called when api/maps/:username hears a post request
+exports.addPin = function (name, newPin, callback) {
   if(!newPin){
     return;
   } else {
     var pinToCreate = new Pin(newPin);
-    User.findOneAndUpdate(query, {$push: {pins: pinToCreate}}, function (err, doc) {
+    User.findOneAndUpdate(name, {$push: {pins: pinToCreate}}, function (err, doc) {
       if (err) {
         callback(err);
         return;
@@ -69,14 +69,14 @@ exports.updatePins = function (query, newPin, callback) {
 exports.removeLastPin = function (name, callback) {
 
 
-  User.findOne(query, function (err, doc) {
-    console.log('remove from database')
+  User.findOne(name, function (err, doc) {
+    console.log('remove from database');
     if (err) {
       callback(err);
       return;
     }
 
-    console.log('doc:', doc)
+    console.log('doc:', doc);
     if(doc){
       var poppedPin = doc.pins.pop();
 
@@ -89,6 +89,21 @@ exports.removeLastPin = function (name, callback) {
 };
 
 
+// updates a specific pin. Called when api/maps/:username hears a put request
+exports.updatePins = function (name, pinId, newPin, callback) {
+  User.findOne(name, function (err, user) {
+    console.log('trying to update pin ', pinId);
+    for (var i = 0; i < users.pins.length; i++) {
+      var pin = user.pins[i];
+      if (pin._id === pinId) {
+        pin = newPin;
+        user.save();
+        callback(err, pin);
+        return;
+      }
+    }
+  });
+};
 
 //deletes a specific pin. called when api/maps/:username hears a delete reqest 
 exports.deletePin = function (name, pinId, callback) {
@@ -97,7 +112,8 @@ exports.deletePin = function (name, pinId, callback) {
     for (var i = 0; i < user.pins.length; i++) {
       var pin = user.pins[i];
       if (pin._id == pinId) {
-        user.pins = user.pins.slice(0, i ).concat(user.pins.slice(i+1));
+        // user.pins = user.pins.slice(0, i ).concat(user.pins.slice(i+1));
+        user.pins.splice(i,1);
         user.save();
         callback(err, pin);
       }
