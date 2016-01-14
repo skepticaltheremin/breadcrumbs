@@ -1,5 +1,6 @@
 var React = require('react');
 var helpers = require('../utils/helpers');
+var DropDown = require('./DropDown.jsx')
 
 var Map = React.createClass({
   getInitialState(){
@@ -14,11 +15,11 @@ var Map = React.createClass({
       map: null
     }
   },
-  
+
   handleLocationChange(e) {
-    this.setState({location: e.target.value});  
+    this.setState({location: e.target.value}); 
   },
-  
+
   handleCommentChange(e) {
     this.setState({comment: e.target.value});
   },
@@ -262,6 +263,8 @@ var Map = React.createClass({
         <div id="map"></div>
       </div>
       <form  onSubmit={this.handleSubmit} className="form-group list-group col-xs-12 col-md-6 col-md-offset-3" >
+        <label htmlFor="category">Category:</label>
+        <DropDown id='category' title='General' items={['Food', 'Nature', 'Pets', 'Sports', 'Music', 'General']} />
         <label htmlFor="location">Location:</label>
         <input type="text" className="form-control" id="location" onChange={this.handleLocationChange} value={this.state.location} placeholder="Location" />
         <label htmlFor="comment">Comment:</label>
