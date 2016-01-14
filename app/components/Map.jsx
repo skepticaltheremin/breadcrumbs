@@ -13,19 +13,29 @@ var Map = React.createClass({
       currentMarker: null,
       lastMarkerTimeStamp: null,
       map: null,
-      category: 'General'
+      category: 'General',
+      saved: false
     }
   },
 
   handleLocationChange(e) {
-    this.setState({location: e.target.value}); 
+    this.setState({location: e.target.value});
   },
 
   handleCommentChange(e) {
     this.setState({comment: e.target.value});
   },
   handleCategoryChange(categoryName) {
-    this.setState({category: categoryName});
+    this.setState({category: categoryName},
+    function(){
+      if(this.state.currentMarker && !this.state.saved){
+        this.state.currentMarker.setIcon({
+          path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+          strokeColor:this.colorGenerator(this.state.category),
+          scale: 10
+        });
+      }
+    }.bind(this));
   },
 
 
@@ -51,19 +61,17 @@ var Map = React.createClass({
 
   updateCurrentLocation(){
     if(this.state.previousMarker){
-      console.log('previousMarker', this.state.previousMarker);
       this.state.previousMarker.setIcon({
         path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-        color:this.state.previousMarker.icon.color,
+        strokeColor:this.state.previousMarker.icon.strokeColor,
         scale: 5
       });
     }
     this.state.currentMarker.setIcon({
       path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-      color:this.colorGenerator(this.state),
+      strokeColor:this.colorGenerator(this.state.category),
       scale: 10
     });
-    console.log('currentMarker', this.state.currentMarker);
     this.state.previousMarker = this.state.currentMarker;
   },
 
@@ -92,6 +100,7 @@ var Map = React.createClass({
         title: 'Add Bread Crumb',
         name: 'add_bread_crumb',
         action: function(e) {
+          self.setState({saved: false});
           var addressString = e.latLng.lat().toString() + " " +  e.latLng.lng().toString();
           self.props.searchAddress(addressString, function(newLocation){
             self.setState({location: newLocation, comment: "Add comments here and save breadcrumb"});
@@ -107,13 +116,14 @@ var Map = React.createClass({
             timestamp: time,
             icon: {
               path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-              strokeColor: self.colorGenerator(self.state),
+              strokeColor: self.colorGenerator(self.state.category),
               scale: 5
             },
             // infoWindow: {
             //   content: '<p style="height:200px; width: 800px;">HTML Content </p>'
             // },
             click: function(e) {
+              self.setState({previousMarker: this.state.currentMarker});
               self.setState({currentMarker: this});
               self.updateCurrentLocation();
               self.matchBreadCrumb(e.timestamp);
@@ -134,9 +144,6 @@ var Map = React.createClass({
     });
   this.refreshMap(map);
 
-    console.log("favorites", this.props.favorites);
-    
-
     // map.addMarkers(this.props.favorites); //no longer used
   },
   refreshMap(map){
@@ -156,7 +163,7 @@ var Map = React.createClass({
           timestamp: favorite.timestamp,
           icon: {
             path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-            strokeColor: self.colorGenerator(favorite),
+            strokeColor: self.colorGenerator(favorite.category),
             scale: 5
           },
           click: function(e) {
@@ -173,18 +180,17 @@ var Map = React.createClass({
 
 
   colorGenerator(input){
-    console.log('color',input.category);
-    if(input.category === 'Food'){
+    if(input === 'Food'){
       return 'red';
-    }else if(input.category === 'Nature'){
+    }else if(input === 'Nature'){
       return 'green';
-    }else if(input.category === 'Sports'){
+    }else if(input === 'Sports'){
       return 'yellow';
-    }else if(input.category === 'Pets'){
+    }else if(input === 'Pets'){
       return 'orange';
-    }else if(input.category === 'Music'){
+    }else if(input === 'Music'){
       return 'blue';
-    }else if(input.category === 'General'){
+    }else if(input === 'General'){
       return 'black';
     }else{
       return 'purple';
@@ -282,7 +288,7 @@ var Map = React.createClass({
     var timestamp = this.state.lastMarkerTimeStamp;
     this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location, this.state.category);
     // this.state.currentMarker.setMap(null);
-    this.setState({location: '', comment: ''});
+    this.setState({location: '', comment: '', saved: true});
   },
 
   render(){
