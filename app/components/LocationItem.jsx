@@ -19,10 +19,9 @@ var LocationItem = React.createClass({
     return (
       <span className={cn}>
       <a onClick={this.handleClick}>
-        {this.props.details.note}
+        <span>{this.props.details.note}</span>
         <span>{this.props.address}</span>
         <span className="createdAt">{ moment(this.props.timestamp).fromNow() }</span>
-        
       </a>
       <EditItem title="EDIT" />
       </span>

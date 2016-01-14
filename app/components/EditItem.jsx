@@ -3,20 +3,16 @@ var EditScreen = require('./EditScreen.jsx');
 
 var EditItem = React.createClass({
 
-	alertMe(){
-		console.log('alertme called')
-		alert("alertMeCalled")
-	  },
-
+	
   render(){
 	return <span>
-	<button data-toggle='modal' data-target='#myModal'>{this.props.title}</button>
+	<button className='btn btn-primary glyphicon-menu-right' data-toggle='modal' data-target='#myModal'>{this.props.title}</button>
 	<div id="myModal" className="modal fade" role="dialog">
 	  <div className="modal-dialog">
 	    <div className="modal-content">
 	      <div className="modal-header">
 	        <button type="button" className="close" data-dismiss="modal">&times;</button>
-	        <h4 className="modal-title">Edit Item</h4>
+	        <h4 className="modal-title">Edit Your Breadcrumb</h4>
 	      </div>
 	      <div className="modal-body">
 	        <textarea placeholder='Update your note here'></textarea>
