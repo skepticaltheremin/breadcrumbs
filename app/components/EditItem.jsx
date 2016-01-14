@@ -5,6 +5,7 @@ var EditItem = React.createClass({
 
 	
   render(){
+  	console.log("Edit Item called!", this.props.pinObject);
 	return <span>
 	<div id="myModal" className="modal fade" role="dialog">
 	  <div className="modal-dialog">
