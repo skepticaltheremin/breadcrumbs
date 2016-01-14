@@ -1,5 +1,5 @@
 var React = require('react');
-var LocationItem = require('./LocationItem');
+var LocationItem = require('./LocationItem.jsx');
 
 var LocationList = React.createClass({
 

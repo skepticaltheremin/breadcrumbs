@@ -1,12 +1,12 @@
 var React = require('react');
 
-var Search = require('./Search');
-var Map = require('./Map');
-var CurrentLocation = require('./CurrentLocation');
-var LocationList = require('./LocationList');
-var SearchUser = require('./SearchUser');
+var Search = require('./Search.jsx');
+var Map = require('./Map.jsx');
+var CurrentLocation = require('./CurrentLocation.jsx');
+var LocationList = require('./LocationList.jsx');
+var SearchUser = require('./SearchUser.jsx');
 var helpers = require('../utils/helpers');
-var Signup = require('./Signup');
+var Signup = require('./Signup.jsx');
 
 
 var MapApp = React.createClass({

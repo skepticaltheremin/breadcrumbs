@@ -1,5 +1,4 @@
 var React = require('react');
-var LocationItem = require('./LocationItem');
 var moment = require('moment');
 
 var LocationItem = React.createClass({
