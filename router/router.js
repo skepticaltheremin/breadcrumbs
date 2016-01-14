@@ -14,15 +14,15 @@ console.log('using router...')
 //users 
 //////////////////
 
-//get all users. not usually useful
+// retrieve users by query via req.body. If req.body is empty, should return all users
 router.route('/users')
   .get(function (req, res) {
-    console.log('user get')
-    userController.getAll(function(err, person){
+    console.log('user get', req.body);
+    userController.getUser(function(err, person){
       if (err) {
-        return res.json({err: err})
+        return res.json({err: err});
       }
-      res.json(person)
+      res.json(person);
     });
   });
 
@@ -30,19 +30,20 @@ router.route('/users')
 router.route('/users')
   .post(function (req, res) {
     //example:
-    console.log("post to /users", req.body.username,req.body.password);
+    console.log("post to /users", req.body.username, req.body.name, req.body.avatar);
     var newuser = {
       username: req.body.username,
-      password: req.body.password,
+      name: req.body.name,
+      avatar: req.body.avatar,
       pins: []
-    }
+    };
 
-    userController.addUser(newuser, function(err, pins){
+    userController.addUser(newuser, function(err, user){
        if (err) {
         console.log(err);
         return res.json({err: err});
       }
-      res.status(201).json(pins);
+      res.status(201).json(user);
     });
   });
 
