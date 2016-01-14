@@ -135,7 +135,7 @@ var MapApp = React.createClass({
           <LocationList locations={this.state.favorites}
             activeLocationAddress={this.state.currentAddress} 
             onClick={this.searchForAddress} />
-
+          
         </div>
 
       );
