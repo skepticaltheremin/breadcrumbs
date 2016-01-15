@@ -14,8 +14,8 @@ var LocationList = React.createClass({
       // Notice that we are passing the onClick callback of this
       // LocationList to each LocationItem.
 
-      return <LocationItem address={l.address} timestamp={l.timestamp} 
-          active={active} onClick={self.props.onClick} />
+      return <LocationItem address={l.address} timestamp={l.timestamp} edit={self.props.setEdit} pin={l}
+          active={active} category={l.category} details ={l.details} title='EDIT' onClick={self.props.onClick} />
     });
 
     if(!locations.length){

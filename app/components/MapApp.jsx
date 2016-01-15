@@ -7,6 +7,7 @@ var LocationList = require('./LocationList.jsx');
 var SearchUser = require('./SearchUser.jsx');
 var helpers = require('../utils/helpers');
 var Signup = require('./Signup.jsx');
+var EditItem = require('./EditItem.jsx')
 
 
 var MapApp = React.createClass({
@@ -29,7 +30,8 @@ var MapApp = React.createClass({
       center: {
         lat: 37.7836966,
         lng: -122.4089664
-      }
+      },
+      editingPin: {}
     };
   },
 
@@ -113,11 +115,16 @@ var MapApp = React.createClass({
 
   },
 
+  setEdit: function (pinObject) {
+    this.setState({editingPin: pinObject});
+  },
+
   render(){
     if(this.state.loggedin){
       return (
 
         <div>
+          <EditItem title="EDIT" pinObject={this.state.editingPin} />
           <h1 className="col-xs-12 col-md-6 col-md-offset-3">My Breadcrumbs</h1>
           <Search onSearch={this.searchForAddress} />
 
@@ -134,8 +141,8 @@ var MapApp = React.createClass({
 
           <LocationList locations={this.state.favorites}
             activeLocationAddress={this.state.currentAddress} 
-            onClick={this.searchForAddress} />
-
+            onClick={this.searchForAddress} setEdit={this.setEdit}/>
+          
         </div>
 
       );

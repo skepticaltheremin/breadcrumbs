@@ -1,10 +1,16 @@
 var React = require('react');
 var moment = require('moment');
+var EditItem = require('./EditItem.jsx');
 
 var LocationItem = React.createClass({
 
   handleClick(){
     this.props.onClick(this.props.address, null, true);
+  },
+
+  // editClick is a wrapper for the parent, LocationList (function is called 'edit')
+  editClick(){
+    this.props.edit(this.props.pin);
   },
 
   render(){
@@ -16,11 +22,13 @@ var LocationItem = React.createClass({
     }
 
     return (
+
       <a className={cn} onClick={this.handleClick}>
         {this.props.address}
         <span className="createdAt">{ moment(this.props.timestamp).fromNow() }</span>
-        <span className="glyphicon glyphicon-menu-right"></span>
+        <span onClick={this.editClick} className='label label-default label-pill pull-xm-right' data-toggle='modal' data-target='#myModal'>{this.props.title}</span>
       </a>
+
     )
 
   }
