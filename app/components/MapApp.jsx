@@ -61,15 +61,10 @@ var MapApp = React.createClass({
       location: location,
       category: category
     };
-    favorites.push(breadcrumb);
-
-    this.setState({
-      favorites: favorites
-    });
 
     helpers.addBreadCrumb(this.state.user, breadcrumb, function(data){
-      console.log(data);
-    });
+      this.setState({favorites: this.state.favorites.concat(data)});
+    }.bind(this));
     localStorage.favorites = JSON.stringify(favorites);
 
   },
