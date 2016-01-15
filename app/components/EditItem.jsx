@@ -1,6 +1,9 @@
 var React = require('react');
 var EditItem = React.createClass({
 
+	sendUpdate(){
+		this.props.updatePin('test1', 'test2');
+	},
 	
   render(){
   	console.log("Edit Item called!", this.props.pinObject);
@@ -17,7 +20,7 @@ var EditItem = React.createClass({
 	      </div>
 	      <div className="modal-footer">
 	        <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-	        <button type="button" className="btn btn-default" data-dismiss="modal">Submit</button>
+	        <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.sendUpdate}>Submit</button>
 	      </div>
 	    </div>
 	  </div>
