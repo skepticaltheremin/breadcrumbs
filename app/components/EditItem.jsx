@@ -1,6 +1,4 @@
 var React = require('react');
-var EditScreen = require('./EditScreen.jsx');
-
 var EditItem = React.createClass({
 
 	
