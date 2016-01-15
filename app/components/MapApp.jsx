@@ -121,7 +121,7 @@ var MapApp = React.createClass({
       if (this.state.favorites[i]._id === data._id) {
         this.setState({
           // find the appropriate pin to update. PITA due to pure function restriction
-          favorites: this.state.favorites.slice(0,i).concat(data).concat(this.state.favorites.slice(i+1));
+          favorites: this.state.favorites.slice(0,i).concat(data).concat(this.state.favorites.slice(i+1))
         });
       }
     }
