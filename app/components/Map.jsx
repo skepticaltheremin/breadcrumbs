@@ -1,5 +1,6 @@
 var React = require('react');
 var helpers = require('../utils/helpers');
+var DropDown = require('./DropDown.jsx')
 
 var Map = React.createClass({
   getInitialState(){
@@ -11,17 +12,22 @@ var Map = React.createClass({
       previousMarker: null,
       currentMarker: null,
       lastMarkerTimeStamp: null,
-      map: null
+      map: null,
+      category: 'General'
     }
   },
-  
+
   handleLocationChange(e) {
-    this.setState({location: e.target.value});  
+    this.setState({location: e.target.value}); 
   },
-  
+
   handleCommentChange(e) {
     this.setState({comment: e.target.value});
   },
+  handleCategoryChange(categoryName) {
+    this.setState({category: categoryName});
+  },
+
 
   matchBreadCrumb(timestamp){
     var breadcrumbs = this.props.favorites;
@@ -39,8 +45,8 @@ var Map = React.createClass({
     this.props.onFavoriteToggle(address);
   },
 
-  addFavBreadCrumb(id, lat, lng, timestamp, details, infoWindow, location) {
-    this.props.onAddToFavBcs(id, lat, lng, timestamp, details, infoWindow, location);
+  addFavBreadCrumb(id, lat, lng, timestamp, details, infoWindow, location, category) {
+    this.props.onAddToFavBcs(id, lat, lng, timestamp, details, infoWindow, location, category);
   },
 
   updateCurrentLocation(){
@@ -133,7 +139,7 @@ var Map = React.createClass({
       if(!data){
         return;
       }
-      self.setState({breadcrumbs: data.pins});
+      self.setState({breadcrumbs: data});
       self.state.breadcrumbs.forEach(function(favorite, index){
         map.addMarker({
           lat: favorite.lat,
@@ -248,9 +254,9 @@ var Map = React.createClass({
     e.preventDefault();
     var id = this.props.favorites.length;
     var timestamp = this.state.lastMarkerTimeStamp;
-    this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location);
+    this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location, this.state.category);
     // this.state.currentMarker.setMap(null);
-    this.setState({location: '', comment: ''});
+    this.setState({location: '', comment: '', category: 'General'});
   },
 
   render(){
@@ -262,6 +268,8 @@ var Map = React.createClass({
         <div id="map"></div>
       </div>
       <form  onSubmit={this.handleSubmit} className="form-group list-group col-xs-12 col-md-6 col-md-offset-3" >
+        <label htmlFor="category">Category:</label>
+        <DropDown id='category' title='General' items={['Food', 'Nature', 'Pets', 'Sports', 'Music', 'General']} whenSelected={this.handleCategoryChange} />
         <label htmlFor="location">Location:</label>
         <input type="text" className="form-control" id="location" onChange={this.handleLocationChange} value={this.state.location} placeholder="Location" />
         <label htmlFor="comment">Comment:</label>

@@ -1,12 +1,13 @@
 var React = require('react');
 
-var Search = require('./Search');
-var Map = require('./Map');
-var CurrentLocation = require('./CurrentLocation');
-var LocationList = require('./LocationList');
-var SearchUser = require('./SearchUser');
+var Search = require('./Search.jsx');
+var Map = require('./Map.jsx');
+var CurrentLocation = require('./CurrentLocation.jsx');
+var LocationList = require('./LocationList.jsx');
+var SearchUser = require('./SearchUser.jsx');
 var helpers = require('../utils/helpers');
-var Signup = require('./Signup');
+var Signup = require('./Signup.jsx');
+var EditItem = require('./EditItem.jsx')
 
 
 var MapApp = React.createClass({
@@ -29,7 +30,8 @@ var MapApp = React.createClass({
       center: {
         lat: 37.7836966,
         lng: -122.4089664
-      }
+      },
+      editingPin: {}
     };
   },
 
@@ -38,7 +40,7 @@ var MapApp = React.createClass({
     this.setState({user: username, loggedin: true}); 
     helpers.getAllBreadCrumbs(username, function(data){
       if(data){
-        this.setState({favorites: data.pins});
+        this.setState({favorites: data});
       }
     }.bind(this));
 
@@ -47,7 +49,7 @@ var MapApp = React.createClass({
   componentDidMount(){
   },
 
-  addToFavBreadCrumbs(id, lat, lng, timestamp, details, location) {
+  addToFavBreadCrumbs(id, lat, lng, timestamp, details, location, category) {
     var favorites = this.state.favorites;
     var breadcrumb = {
       id: id,
@@ -56,7 +58,8 @@ var MapApp = React.createClass({
       timestamp: timestamp,
       details: details,
       address: this.state.currentAddress,
-      location: location
+      location: location,
+      category: category
     };
     favorites.push(breadcrumb);
 
@@ -112,11 +115,16 @@ var MapApp = React.createClass({
 
   },
 
+  setEdit: function (pinObject) {
+    this.setState({editingPin: pinObject});
+  },
+
   render(){
     if(this.state.loggedin){
       return (
 
         <div>
+          <EditItem title="EDIT" pinObject={this.state.editingPin} />
           <h1 className="col-xs-12 col-md-6 col-md-offset-3">My Breadcrumbs</h1>
           <Search onSearch={this.searchForAddress} />
 
@@ -133,8 +141,8 @@ var MapApp = React.createClass({
 
           <LocationList locations={this.state.favorites}
             activeLocationAddress={this.state.currentAddress} 
-            onClick={this.searchForAddress} />
-
+            onClick={this.searchForAddress} setEdit={this.setEdit}/>
+          
         </div>
 
       );
