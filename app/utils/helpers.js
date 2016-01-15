@@ -87,7 +87,7 @@ var login = function(username, password, cb){
 
 var updatePin = function(username, pinId, updatedPin, cb) {
   $.ajax({
-    url: '/api/maps/:' + username,
+    url: '/api/maps/' + username,
     type: 'PUT',
     data: {
       _id: pinId,

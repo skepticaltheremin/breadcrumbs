@@ -128,9 +128,7 @@ var MapApp = React.createClass({
   },
 
   updatePin(_id, newPin){
-    alert('update pin from editItem is hooked up');
-    console.log(_id, newPin);
-    // helpers.updatePin(this.state.user, _id, newPin, this.modifyPin).bind(this);
+    helpers.updatePin(this.state.user, _id, newPin, this.modifyPin).bind(this);
   },
 
   handleCategoryChange(categoryName) {

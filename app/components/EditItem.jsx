@@ -2,8 +2,8 @@ var React = require('react');
 var EditItem = React.createClass({
 
 	sendUpdate(){
-		console.log($('.modal-body').children()[0].value);
-		this.props.updatePin(this.props.pinObject._id, $('.modal-body').children()[0].value);
+		this.props.pinObject.details.note = $('.modal-body').children()[0].value;
+		this.props.updatePin(this.props.pinObject._id, this.props.pinObject);
 	},
 
   render(){
