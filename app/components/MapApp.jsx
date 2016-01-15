@@ -8,6 +8,7 @@ var SearchUser = require('./SearchUser.jsx');
 var helpers = require('../utils/helpers');
 var Signup = require('./Signup.jsx');
 var EditItem = require('./EditItem.jsx')
+var DropDown = require('./DropDown.jsx')
 
 
 var MapApp = React.createClass({
@@ -22,6 +23,7 @@ var MapApp = React.createClass({
       user: '',
       loggedin: false,
       favorites: favorites,
+      filter: 'All',
       currentAddress: 'Hack Reactor',
       mapCoordinates: {
         lat: 37.7836966,
@@ -119,6 +121,10 @@ var MapApp = React.createClass({
     this.setState({editingPin: pinObject});
   },
 
+  handleCategoryChange(categoryName) {
+    this.setState({filter: categoryName});
+  },
+
   render(){
     if(this.state.loggedin){
       return (
@@ -127,6 +133,8 @@ var MapApp = React.createClass({
           <EditItem title="EDIT" pinObject={this.state.editingPin} />
           <h1 className="col-xs-12 col-md-6 col-md-offset-3">My Breadcrumbs</h1>
           <Search onSearch={this.searchForAddress} />
+          <label htmlFor="category">Filter:</label>
+          <DropDown id='category' title='All' items={['All', 'Food', 'Nature', 'Pets', 'Sports', 'Music', 'General']} whenSelected={this.handleCategoryChange} />
 
           <Map lat={this.state.mapCoordinates.lat}
             lng={this.state.mapCoordinates.lng}
@@ -141,8 +149,7 @@ var MapApp = React.createClass({
 
           <LocationList locations={this.state.favorites}
             activeLocationAddress={this.state.currentAddress} 
-            onClick={this.searchForAddress} setEdit={this.setEdit}/>
-          
+            onClick={this.searchForAddress} setEdit={this.setEdit} filter={this.state.filter}/>          
         </div>
 
       );

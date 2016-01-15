@@ -13,19 +13,30 @@ var Map = React.createClass({
       currentMarker: null,
       lastMarkerTimeStamp: null,
       map: null,
-      category: 'General'
+      category: 'General',
+      saved: false,
+      old: false
     }
   },
 
   handleLocationChange(e) {
-    this.setState({location: e.target.value}); 
+    this.setState({location: e.target.value});
   },
 
   handleCommentChange(e) {
     this.setState({comment: e.target.value});
   },
   handleCategoryChange(categoryName) {
-    this.setState({category: categoryName});
+    this.setState({category: categoryName},
+    function(){
+      if(this.state.currentMarker && !this.state.saved){
+        this.state.currentMarker.setIcon({
+          path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+          strokeColor:this.colorGenerator(this.state.category),
+          scale: 10
+        });
+      }
+    }.bind(this));
   },
 
 
@@ -53,15 +64,17 @@ var Map = React.createClass({
     if(this.state.previousMarker){
       this.state.previousMarker.setIcon({
         path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-        strokeColor: "red",
+        strokeColor:this.state.previousMarker.icon.strokeColor,
         scale: 5
       });
     }
-    this.state.currentMarker.setIcon({
-      path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-      strokeColor: "green",
-      scale: 5
-    });
+    if(!this.state.old){
+      this.state.currentMarker.setIcon({
+        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+        strokeColor:this.colorGenerator(this.state.category),
+        scale: 10
+      });
+    }
     this.state.previousMarker = this.state.currentMarker;
   },
 
@@ -90,6 +103,7 @@ var Map = React.createClass({
         title: 'Add Bread Crumb',
         name: 'add_bread_crumb',
         action: function(e) {
+          self.setState({saved: false, old: false});
           var addressString = e.latLng.lat().toString() + " " +  e.latLng.lng().toString();
           self.props.searchAddress(addressString, function(newLocation){
             self.setState({location: newLocation, comment: "Add comments here and save breadcrumb"});
@@ -105,13 +119,16 @@ var Map = React.createClass({
             timestamp: time,
             icon: {
               path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-              strokeColor: "green",
+              strokeColor: self.colorGenerator(self.state.category),
               scale: 5
             },
             // infoWindow: {
             //   content: '<p style="height:200px; width: 800px;">HTML Content </p>'
             // },
             click: function(e) {
+              if(this.state.currentMarker){
+              self.setState({previousMarker: this.state.currentMarker});
+              }
               self.setState({currentMarker: this});
               self.updateCurrentLocation();
               self.matchBreadCrumb(e.timestamp);
@@ -130,11 +147,13 @@ var Map = React.createClass({
         }
       }]
     });
-
-    console.log("favorites", this.props.favorites);
-    
+  this.refreshMap(map);
 
     // map.addMarkers(this.props.favorites); //no longer used
+  },
+  refreshMap(map){
+    var self = this;
+
     helpers.getAllBreadCrumbs(this.props.user, function(data){
       if(!data){
         return;
@@ -149,20 +168,48 @@ var Map = React.createClass({
           timestamp: favorite.timestamp,
           icon: {
             path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-            strokeColor: "red",
+            strokeColor: self.colorGenerator(favorite.category),
             scale: 5
           },
           click: function(e) {
-            self.setState({currentMarker: this});
-            self.updateCurrentLocation();
-            self.matchBreadCrumb(e.timestamp);
+            self.setState({saved: true, old: true},function(){
+              e.setIcon({
+                path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                strokeColor:e.icon.strokeColor,
+                scale: 10
+              });
+              // self.setState({currentMarker: this});
+              // self.updateCurrentLocation();
+              self.matchBreadCrumb(e.timestamp);
+              self.setState({currentMarker: e},function(){
+                self.updateCurrentLocation();
+              });
+            });
             // self.state.currentMarker.setMap(null);
           }
         });
 
       });
     });
+  },
 
+
+  colorGenerator(input){
+    if(input === 'Food'){
+      return 'red';
+    }else if(input === 'Nature'){
+      return 'green';
+    }else if(input === 'Sports'){
+      return 'yellow';
+    }else if(input === 'Pets'){
+      return 'orange';
+    }else if(input === 'Music'){
+      return 'blue';
+    }else if(input === 'General'){
+      return 'black';
+    }else{
+      return 'purple';
+    }
   },
 
   componentDidUpdate(){
@@ -256,7 +303,7 @@ var Map = React.createClass({
     var timestamp = this.state.lastMarkerTimeStamp;
     this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location, this.state.category);
     // this.state.currentMarker.setMap(null);
-    this.setState({location: '', comment: '', category: 'General'});
+    this.setState({location: '', comment: '', saved: true});
   },
 
   render(){
@@ -269,7 +316,7 @@ var Map = React.createClass({
       </div>
       <form  onSubmit={this.handleSubmit} className="form-group list-group col-xs-12 col-md-6 col-md-offset-3" >
         <label htmlFor="category">Category:</label>
-        <DropDown id='category' title='General' items={['Food', 'Nature', 'Pets', 'Sports', 'Music', 'General']} whenSelected={this.handleCategoryChange} />
+        <DropDown id='category' title={this.state.category} items={['Food', 'Nature', 'Pets', 'Sports', 'Music', 'General']} whenSelected={this.handleCategoryChange} />
         <label htmlFor="location">Location:</label>
         <input type="text" className="form-control" id="location" onChange={this.handleLocationChange} value={this.state.location} placeholder="Location" />
         <label htmlFor="comment">Comment:</label>
