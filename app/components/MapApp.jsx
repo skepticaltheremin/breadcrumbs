@@ -116,6 +116,23 @@ var MapApp = React.createClass({
     this.setState({editingPin: pinObject});
   },
 
+  modifyPin(data) {
+    for (var i = 0; i < this.state.favorites.length; i++ ) {
+      if (this.state.favorites[i]._id === data._id) {
+        this.setState({
+          // find the appropriate pin to update. PITA due to pure function restriction
+          favorites: this.state.favorites.slice(0,i).concat(data).concat(this.state.favorites.slice(i+1))
+        });
+      }
+    }
+  },
+
+  updatePin(_id, newPin){
+    alert('update pin from editItem is hooked up');
+    console.log(_id, newPin);
+    // helpers.updatePin(this.state.user, _id, newPin, this.modifyPin).bind(this);
+  },
+
   handleCategoryChange(categoryName) {
     this.setState({filter: categoryName});
   },
@@ -125,7 +142,7 @@ var MapApp = React.createClass({
       return (
 
         <div>
-          <EditItem title="EDIT" pinObject={this.state.editingPin} />
+          <EditItem title="EDIT" pinObject={this.state.editingPin} updatePin={this.updatePin} />
           <h1 className="col-xs-12 col-md-6 col-md-offset-3">My Breadcrumbs</h1>
           <Search onSearch={this.searchForAddress} />
           <label htmlFor="category">Filter:</label>

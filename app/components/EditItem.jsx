@@ -1,28 +1,33 @@
 var React = require('react');
 var EditItem = React.createClass({
 
-	
+	sendUpdate(){
+		console.log($('.modal-body').children()[0].value);
+		this.props.updatePin(this.props.pinObject._id, $('.modal-body').children()[0].value);
+	},
+
   render(){
+  	var comment = this.props.pinObject.details ? this.props.pinObject.details.note : '';
   	console.log("Edit Item called!", this.props.pinObject);
-	return <span>
-	<div id="myModal" className="modal fade" role="dialog">
-	  <div className="modal-dialog">
-	    <div className="modal-content">
-	      <div className="modal-header">
-	        <button type="button" className="close" data-dismiss="modal">&times;</button>
-	        <h4 className="modal-title">Edit Your Breadcrumb</h4>
-	      </div>
-	      <div className="modal-body">
-	        <textarea placeholder='Update your note here'></textarea>
-	      </div>
-	      <div className="modal-footer">
-	        <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-	        <button type="button" className="btn btn-default" data-dismiss="modal">Submit</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-    </span>
+		return <span>
+		<div id="myModal" className="modal fade" role="dialog">
+		  <div className="modal-dialog">
+		    <div className="modal-content">
+		      <div className="modal-header">
+		        <button type="button" className="close" data-dismiss="modal">&times;</button>
+		        <h4 className="modal-title">Edit Your Breadcrumb</h4>
+		      </div>
+		      <div className="modal-body">
+		        <textarea placeholder={comment}></textarea>
+		      </div>
+		      <div className="modal-footer">
+		        <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+		        <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.sendUpdate}>Submit</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	  </span>
 
   }
 

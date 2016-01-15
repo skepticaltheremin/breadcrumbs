@@ -85,11 +85,31 @@ var login = function(username, password, cb){
   });
 };
 
+var updatePin = function(username, pinId, updatedPin, cb) {
+  $.ajax({
+    url: '/api/maps/:' + username,
+    type: 'PUT',
+    data: {
+      _id: pinId,
+      newPin: updatedPin
+    },
+    dataType: 'json',
+    success: function(data){
+      cb(data);
+    },
+    error: function(xhr, status, err) {
+      console.log("err");
+      console.log(xhr.toString(), status.toString(), err.toString());
+    }
+  });
+};
+
 var helpers = {
   getAllBreadCrumbs: getAllBreadCrumbs,
   addBreadCrumb: addBreadCrumb,
   signupUser: signupUser,
-  login: login
-}
+  login: login,
+  updatePin: updatePin
+};
 
 module.exports = helpers;
