@@ -22,14 +22,13 @@ var LocationItem = React.createClass({
     }
 
     return (
-      <span className={cn}>
-      <a onClick={this.handleClick}>
-        <span>{this.props.details.note}</span>
-        <span>{this.props.address}</span>
+
+      <a className={cn} onClick={this.handleClick}>
+        {this.props.address}
         <span className="createdAt">{ moment(this.props.timestamp).fromNow() }</span>
+        <span onClick={this.editClick} className='label label-default label-pill pull-xm-right' data-toggle='modal' data-target='#myModal'>{this.props.title}</span>
       </a>
-        <button onClick={this.editClick} className='btn btn-primary glyphicon-menu-right' data-toggle='modal' data-target='#myModal'>{this.props.title}</button>
-      </span>
+
     )
 
   }
