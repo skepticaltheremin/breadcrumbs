@@ -14,7 +14,8 @@ var Map = React.createClass({
       lastMarkerTimeStamp: null,
       map: null,
       category: 'General',
-      saved: false
+      saved: false,
+      old: false
     }
   },
 
@@ -67,11 +68,13 @@ var Map = React.createClass({
         scale: 5
       });
     }
-    this.state.currentMarker.setIcon({
-      path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-      strokeColor:this.colorGenerator(this.state.category),
-      scale: 10
-    });
+    if(!this.state.old){
+      this.state.currentMarker.setIcon({
+        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+        strokeColor:this.colorGenerator(this.state.category),
+        scale: 10
+      });
+    }
     this.state.previousMarker = this.state.currentMarker;
   },
 
@@ -100,7 +103,7 @@ var Map = React.createClass({
         title: 'Add Bread Crumb',
         name: 'add_bread_crumb',
         action: function(e) {
-          self.setState({saved: false});
+          self.setState({saved: false, old: false});
           var addressString = e.latLng.lat().toString() + " " +  e.latLng.lng().toString();
           self.props.searchAddress(addressString, function(newLocation){
             self.setState({location: newLocation, comment: "Add comments here and save breadcrumb"});
@@ -123,7 +126,9 @@ var Map = React.createClass({
             //   content: '<p style="height:200px; width: 800px;">HTML Content </p>'
             // },
             click: function(e) {
+              if(this.state.currentMarker){
               self.setState({previousMarker: this.state.currentMarker});
+              }
               self.setState({currentMarker: this});
               self.updateCurrentLocation();
               self.matchBreadCrumb(e.timestamp);
@@ -167,9 +172,19 @@ var Map = React.createClass({
             scale: 5
           },
           click: function(e) {
-            self.setState({currentMarker: this});
-            self.updateCurrentLocation();
-            self.matchBreadCrumb(e.timestamp);
+            self.setState({saved: true, old: true},function(){
+              e.setIcon({
+                path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                strokeColor:e.icon.strokeColor,
+                scale: 10
+              });
+              // self.setState({currentMarker: this});
+              // self.updateCurrentLocation();
+              self.matchBreadCrumb(e.timestamp);
+              self.setState({currentMarker: e},function(){
+                self.updateCurrentLocation();
+              });
+            });
             // self.state.currentMarker.setMap(null);
           }
         });
