@@ -1,12 +1,14 @@
 var React = require('react');
 
-var Search = require('./Search');
-var Map = require('./Map');
-var CurrentLocation = require('./CurrentLocation');
-var LocationList = require('./LocationList');
-var SearchUser = require('./SearchUser');
+var Search = require('./Search.jsx');
+var Map = require('./Map.jsx');
+var CurrentLocation = require('./CurrentLocation.jsx');
+var LocationList = require('./LocationList.jsx');
+var SearchUser = require('./SearchUser.jsx');
 var helpers = require('../utils/helpers');
-var Signup = require('./Signup');
+var Signup = require('./Signup.jsx');
+var EditItem = require('./EditItem.jsx');
+var DropDown = require('./DropDown.jsx');
 
 
 var MapApp = React.createClass({
@@ -21,6 +23,7 @@ var MapApp = React.createClass({
       user: '',
       loggedin: false,
       favorites: favorites,
+      filter: 'All',
       currentAddress: 'Hack Reactor',
       mapCoordinates: {
         lat: 37.7836966,
@@ -29,7 +32,8 @@ var MapApp = React.createClass({
       center: {
         lat: 37.7836966,
         lng: -122.4089664
-      }
+      },
+      editingPin: {}
     };
   },
 
@@ -38,7 +42,7 @@ var MapApp = React.createClass({
     this.setState({user: username, loggedin: true}); 
     helpers.getAllBreadCrumbs(username, function(data){
       if(data){
-        this.setState({favorites: data.pins});
+        this.setState({favorites: data});
       }
     }.bind(this));
 
@@ -47,7 +51,7 @@ var MapApp = React.createClass({
   componentDidMount(){
   },
 
-  addToFavBreadCrumbs(id, lat, lng, timestamp, details, location) {
+  addToFavBreadCrumbs(id, lat, lng, timestamp, details, location, category) {
     var favorites = this.state.favorites;
     var breadcrumb = {
       id: id,
@@ -56,17 +60,13 @@ var MapApp = React.createClass({
       timestamp: timestamp,
       details: details,
       address: this.state.currentAddress,
-      location: location
+      location: location,
+      category: category
     };
-    favorites.push(breadcrumb);
-
-    this.setState({
-      favorites: favorites
-    });
 
     helpers.addBreadCrumb(this.state.user, breadcrumb, function(data){
-      console.log(data);
-    });
+      this.setState({favorites: this.state.favorites.concat(data)});
+    }.bind(this));
     localStorage.favorites = JSON.stringify(favorites);
 
   },
@@ -104,7 +104,7 @@ var MapApp = React.createClass({
         }
 
         if(cb){
-          cb(results[0].formatted_address); 
+          cb(results[0].formatted_address);
         }
 
       }
@@ -112,13 +112,51 @@ var MapApp = React.createClass({
 
   },
 
+  setEdit: function (pinObject) {
+    this.setState({editingPin: pinObject});
+  },
+
+  modifyPin(data) {
+    for (var i = 0; i < this.state.favorites.length; i++ ) {
+      if (this.state.favorites[i]._id === data._id) {
+        this.setState({
+          // find the appropriate pin to update. PITA due to pure function restriction
+          favorites: this.state.favorites.slice(0,i).concat(data).concat(this.state.favorites.slice(i+1))
+        });
+      }
+    }
+  },
+
+  removedPinFromState(data){
+    helpers.getAllBreadCrumbs(this.state.user, function(data){
+      this.setState({
+        favorites: data
+      });
+    }.bind(this));
+  },
+
+  updatePin(_id, newPin){
+    helpers.updatePin.call(this, this.state.user, _id, newPin, this.modifyPin);
+  },
+
+  deletePin(_id){
+    helpers.deletePin.call(this, this.state.user, _id, this.removedPinFromState);
+  },
+
+  handleCategoryChange(categoryName) {
+    this.setState({filter: categoryName});
+  },
+
   render(){
     if(this.state.loggedin){
       return (
 
         <div>
+          <EditItem title="EDIT" pinObject={this.state.editingPin} updatePin={this.updatePin} deletePin={this.deletePin} />
           <h1 className="col-xs-12 col-md-6 col-md-offset-3">My Breadcrumbs</h1>
           <Search onSearch={this.searchForAddress} />
+          <label htmlFor="category">Filter:</label>
+          <DropDown id='category' title='All' items={['All', 'Food', 'Nature', 'Pets', 'Sports', 'Music', 'General']} whenSelected={this.handleCategoryChange} />
 
           <Map lat={this.state.mapCoordinates.lat}
             lng={this.state.mapCoordinates.lng}
@@ -133,8 +171,7 @@ var MapApp = React.createClass({
 
           <LocationList locations={this.state.favorites}
             activeLocationAddress={this.state.currentAddress} 
-            onClick={this.searchForAddress} />
-
+            onClick={this.searchForAddress} setEdit={this.setEdit} filter={this.state.filter}/>          
         </div>
 
       );
