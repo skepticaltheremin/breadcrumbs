@@ -128,7 +128,7 @@ var MapApp = React.createClass({
   },
 
   updatePin(_id, newPin){
-    helpers.updatePin(this.state.user, _id, newPin, this.modifyPin).bind(this);
+    helpers.updatePin.call(this, this.state.user, _id, newPin, this.modifyPin);
   },
 
   handleCategoryChange(categoryName) {

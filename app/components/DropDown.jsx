@@ -18,6 +18,13 @@ module.exports = React.createClass({
     });
     this.props.whenSelected(item);
   },
+
+  editUpdate: function(item) {
+    this.setState({
+      itemTitle: item
+    });
+  },
+
   render: function (){
     var list = this.props.items.map(function(item){
       return <ListItem item={item}
