@@ -66,7 +66,7 @@ var login = function(username, password, cb){
     password: password
   };
   $.ajax({
-    url: '/api/users', //This needs to be a different route for login. not yet implemented
+    url: '/api/users',
     type: 'POST',
     data: user,
     dataType: 'json',
@@ -104,12 +104,31 @@ var updatePin = function(username, pinId, updatedPin, cb) {
   });
 };
 
+var deletePin = function(username, pinId, cb) {
+  $.ajax({
+    url: '/api/maps/' + username,
+    type: 'DELETE',
+    data: {
+      _id: pinId,
+    },
+    dataType: 'json',
+    success: function(data){
+      cb(data);
+    },
+    error: function(xhr, status, err) {
+      console.log("err");
+      console.log(xhr.toString(), status.toString(), err.toString());
+    }
+  });
+};
+
 var helpers = {
   getAllBreadCrumbs: getAllBreadCrumbs,
   addBreadCrumb: addBreadCrumb,
   signupUser: signupUser,
   login: login,
-  updatePin: updatePin
+  updatePin: updatePin,
+  deletePin: deletePin
 };
 
 module.exports = helpers;

@@ -30,7 +30,7 @@ router.route('/users')
 router.route('/users')
   .post(function (req, res) {
     //example:
-    console.log("post to /users", req.body.username, req.body.name, req.body.avatar);
+    console.log("trying to post to /users", req.body.username, req.body.name, req.body.avatar);
     var newuser = {
       username: req.body.username,
       name: req.body.name,

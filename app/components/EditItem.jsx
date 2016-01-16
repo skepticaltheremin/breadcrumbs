@@ -12,7 +12,6 @@ var EditItem = React.createClass({
 	},
 
 	handleCategoryChange(newCat) {
-    debugger;
 		this.setState({
       cat: newCat,
       catChanged: true
@@ -35,16 +34,18 @@ var EditItem = React.createClass({
     if ( this.state.commentChanged ) {
       this.props.pinObject.details.note = this.state.comment;
       this.setState({commentChanged: false});
-      // debugger;
       $('.modal-body').children('textarea').val('');
     }
     this.props.updatePin(this.props.pinObject._id, this.props.pinObject);
     if (this.state.catChanged) {
-      // debugger;
       this.props.pinObject.category = prev;
       this.setState({catChanged: false});
     }
 	},
+
+  sendDelete(){
+    this.props.deletePin(this.props.pinObject._id);
+  },
 
   render(){
 
@@ -53,8 +54,6 @@ var EditItem = React.createClass({
     if (this.refs.somethingElse && (!this.state.catChanged)) {
       this.refs.somethingElse.editUpdate(category);
     }
-    console.log(category);
-    console.log("Edit Item called!", this.props.pinObject);
 		return <span>
 		<div id="myModal" className="modal fade" role="dialog">
 		  <div className="modal-dialog">
@@ -68,6 +67,7 @@ var EditItem = React.createClass({
 		        <textarea placeholder={comment} onChange={this.handleCommentChange} style={{marginTop:'10px'}}></textarea>
 		      </div>
 		      <div className="modal-footer">
+            <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.sendDelete}>Delete</button>
 		        <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
 		        <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.sendUpdate}>Submit</button>
 		      </div>

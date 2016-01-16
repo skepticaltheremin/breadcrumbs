@@ -7,8 +7,8 @@ var LocationList = require('./LocationList.jsx');
 var SearchUser = require('./SearchUser.jsx');
 var helpers = require('../utils/helpers');
 var Signup = require('./Signup.jsx');
-var EditItem = require('./EditItem.jsx')
-var DropDown = require('./DropDown.jsx')
+var EditItem = require('./EditItem.jsx');
+var DropDown = require('./DropDown.jsx');
 
 
 var MapApp = React.createClass({
@@ -104,7 +104,7 @@ var MapApp = React.createClass({
         }
 
         if(cb){
-          cb(results[0].formatted_address); 
+          cb(results[0].formatted_address);
         }
 
       }
@@ -127,8 +127,20 @@ var MapApp = React.createClass({
     }
   },
 
+  removedPinFromState(data){
+    helpers.getAllBreadCrumbs(this.state.user, function(data){
+      this.setState({
+        favorites: data
+      });
+    }.bind(this));
+  },
+
   updatePin(_id, newPin){
     helpers.updatePin.call(this, this.state.user, _id, newPin, this.modifyPin);
+  },
+
+  deletePin(_id){
+    helpers.deletePin.call(this, this.state.user, _id, this.removedPinFromState);
   },
 
   handleCategoryChange(categoryName) {
@@ -140,7 +152,7 @@ var MapApp = React.createClass({
       return (
 
         <div>
-          <EditItem title="EDIT" pinObject={this.state.editingPin} updatePin={this.updatePin} />
+          <EditItem title="EDIT" pinObject={this.state.editingPin} updatePin={this.updatePin} deletePin={this.deletePin} />
           <h1 className="col-xs-12 col-md-6 col-md-offset-3">My Breadcrumbs</h1>
           <Search onSearch={this.searchForAddress} />
           <label htmlFor="category">Filter:</label>
